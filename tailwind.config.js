@@ -1,9 +1,10 @@
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
     extend: {
       colors: {
-        mainColor: "#04aad0",
+        mainbgColor: '#cbe9ff',
+        mainColor: '#027be9',
       },
     },
   },
