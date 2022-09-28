@@ -1,24 +1,22 @@
 import { Keywords } from '../types/commonTypes';
 
 export interface Storage {
-  save(kewords: Array<Keywords>): void;
-  get(): Array<Keywords>;
-  remove(): void;
+  save(key: string, kewords: Array<Keywords>): void;
+  get(key: string): Array<Keywords>;
+  remove(key: string): void;
 }
 
 export class LocalStorage implements Storage {
-  KEY = 'KEYWORDS';
-
-  save: (kewords: Array<Keywords>) => void = kewords => {
-    localStorage.setItem(this.KEY, JSON.stringify(kewords));
+  save: (key: string, kewords: Array<Keywords>) => void = (key, kewords) => {
+    localStorage.setItem(key, JSON.stringify(kewords));
   };
 
-  get: () => Array<Keywords> = () => {
-    const getKeywords = localStorage.getItem(this.KEY);
+  get: (key: string) => Array<Keywords> = key => {
+    const getKeywords = localStorage.getItem(key);
     return JSON.parse(getKeywords as string);
   };
 
-  remove: () => void = () => {
-    localStorage.removeItem(this.KEY);
+  remove: (key: string) => void = key => {
+    localStorage.removeItem(key);
   };
 }
