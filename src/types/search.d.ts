@@ -1,3 +1,5 @@
+import { SickType } from './sick';
+
 type SearchResultType = {
   q: string;
   result: Array<string>;
@@ -13,4 +15,8 @@ type SearchRequestType = {
   limit?: number;
 };
 
-export type { SearchResultType, SearchRequestType };
+type SearchCacheType = {
+  q: Array<SickType>;
+};
+
+export type { SearchResultType, SearchRequestType, SearchCacheType };

@@ -25,23 +25,27 @@ const SickList = () => {
       {searchList ? (
         <ListBox>
           <ListHeader>{localeKR.sickList.recommendListHeader}</ListHeader>
-          {searchList.map((item: SickType, idx: number) => (
-            <ItemContainer key={idx}>
-              <SickItem sickName={item.sickNm} />
-              {searchList.length === idx + 1 ? (
-                !isLoading ? (
-                  // <MoreItemsIndicator ref={lastItemElementRef} onClick={handleLoadMore}>
-                  <MoreItemsIndicator onClick={handleLoadMore}>
-                    <MoreItemsIndicatorIcon />
-                  </MoreItemsIndicator>
-                ) : (
-                  <MoreItemsIndicator>
-                    <Spinner />
-                  </MoreItemsIndicator>
-                )
-              ) : null}
-            </ItemContainer>
-          ))}
+          {searchList.length > 0 ? (
+            searchList.map((item: SickType, idx: number) => (
+              <ItemContainer key={idx}>
+                <SickItem sickName={item.sickNm} />
+                {searchList.length === idx + 1 ? (
+                  !isLoading ? (
+                    // <MoreItemsIndicator ref={lastItemElementRef} onClick={handleLoadMore}>
+                    <MoreItemsIndicator onClick={handleLoadMore}>
+                      <MoreItemsIndicatorIcon />
+                    </MoreItemsIndicator>
+                  ) : (
+                    <MoreItemsIndicator>
+                      <Spinner />
+                    </MoreItemsIndicator>
+                  )
+                ) : null}
+              </ItemContainer>
+            ))
+          ) : (
+            <NoResultsText>{localeKR.sickList.emptyResultPlaceholder}</NoResultsText>
+          )}
         </ListBox>
       ) : null}
     </SickListWrapper>
@@ -98,5 +102,12 @@ const MoreItemsIndicator = styled.div`
 `;
 
 const MoreItemsIndicatorIcon = styled(FaEllipsisH)``;
+
+const NoResultsText = styled.div`
+  padding-top: ${(props) => props.theme.space.small};
+  color: ${(props) => props.theme.colors.textSub};
+  width: 100%;
+  text-align: center;
+`;
 
 export default SickList;

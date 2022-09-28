@@ -4,6 +4,7 @@ export default {
   sickList: {
     recentKeywordHeader: '최근 검색어',
     recommendListHeader: '추천 검색어',
+    emptyResultPlaceholder: '검색어 없음',
   },
   placeholder: {
     searchbar: '질환명을 입력해 주세요',
