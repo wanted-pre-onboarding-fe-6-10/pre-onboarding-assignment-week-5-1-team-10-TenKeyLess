@@ -23,4 +23,5 @@ const Container = styled.div`
   align-items: center;
   background-color: #c5cae9;
   margin: auto;
+  margin-top: 3rem;
 `;

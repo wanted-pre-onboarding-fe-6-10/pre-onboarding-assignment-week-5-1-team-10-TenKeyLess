@@ -32,12 +32,12 @@ const InputBox = styled.form`
   width: 90%;
 `;
 
-const Icon = styled.span`
+export const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 10%;
-  font-size: 1.5rem;
+  font-size: 1rem;
   background-color: #fff;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -54,4 +54,11 @@ const Input = styled.input`
 `;
 const Button = styled.button`
   width: 15%;
+  background-color: #2196f3;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 `;
