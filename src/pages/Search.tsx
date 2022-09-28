@@ -1,25 +1,26 @@
-import { useEffect } from 'react';
-import Http, { BASE_URL } from '../services/Http';
-import GetKeywordService from '../services/KeywordService';
-import { LocalStorage } from '../utils/Storage';
-import Input from './components/Input';
-import Recommend from './components/Recommend';
+import KeywordList from './components/KeywordList';
+import SearchInput from './components/SearchInput';
+import styled from 'styled-components';
+import SearchHeader from './components/SearchHeader';
 
 const Search = () => {
-  const keywordsStorage = new LocalStorage();
-  const http = new Http(BASE_URL, keywordsStorage);
-  const getService = new GetKeywordService(http, keywordsStorage);
-
-  useEffect(() => {
-    getService.getKeyword();
-  }, []);
-
   return (
-    <>
-      <Input />
-      <Recommend />
-    </>
+    <Container>
+      <SearchHeader />
+      <SearchInput />
+      <KeywordList />
+    </Container>
   );
 };
 
 export default Search;
+
+const Container = styled.div`
+  display: flex;
+  width: 600px;
+  height: 600px;
+  flex-direction: column;
+  align-items: center;
+  background-color: #c5cae9;
+  margin: auto;
+`;
