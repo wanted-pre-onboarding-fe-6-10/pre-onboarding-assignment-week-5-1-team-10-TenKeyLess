@@ -11,11 +11,11 @@ import SickList from './SickList';
 import HistoryList from './HistoryList';
 
 const SearchBar = () => {
-  const { query, setQuery, isLoading: isInputLoading } = useInputContext();
+  const { query, setQuery, isLoading, addSearchHistory } = useInputContext();
   const { ref, setFocus, setBlur, isFocus } = useFocus();
 
   const [textInput, setTextInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   /* Debounce 적용 */
   let debounce: NodeJS.Timeout | null = null;
@@ -25,46 +25,33 @@ const SearchBar = () => {
       return;
     } else {
       if (debounce) clearTimeout(debounce);
-      setIsLoading(true);
       debounce = setTimeout(async () => {
         setQuery(e.target.value);
       }, DEBOUNCE_DELAY_TIME);
     }
   };
 
-  // const handleSubmit = useCallback(
-  //   async (e: React.FormEvent<EventTarget>) => {
-  //     try {
-  //       e.preventDefault();
-  //       setIsLoading(true);
-
-  //       const trimmed = query.trim();
-  //       if (!trimmed) {
-  //         return alert('Please write something');
-  //       }
-
-  //       const newItem = { title: trimmed };
-  //       const data = await createTodo(newItem);
-
-  //       if (data) {
-  //         setQuery('');
-  //         return setTodos((prev: Array<TodoType>) => [...prev, data]);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       alert('Something went wrong.');
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   },
-  //   [query, setTodos]
-  // );
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<EventTarget>) => {
+      try {
+        e.preventDefault();
+        addSearchHistory(textInput);
+        // setIsLoading(true);
+        setQuery('');
+      } catch (error) {
+        console.error(error);
+        alert('Something went wrong.');
+      } finally {
+        setTextInput('');
+        // setIsLoading(false);
+      }
+    },
+    [query]
+  );
 
   return (
     <SearchBarWrapper>
-      {/* <FormBox onSubmit={handleSubmit} focused={isFocus}> */}
-      <FormBox focused={isFocus}>
-        {/* <FaSearch /> */}
+      <FormBox onSubmit={handleSubmit} focused={isFocus}>
         <SearchInput
           placeholder={localeKR.placeholder.searchbar}
           ref={ref}
@@ -84,7 +71,8 @@ const SearchBar = () => {
 const SearchBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 60%;
+  min-width: 300px;
   max-width: 600px;
 `;
 

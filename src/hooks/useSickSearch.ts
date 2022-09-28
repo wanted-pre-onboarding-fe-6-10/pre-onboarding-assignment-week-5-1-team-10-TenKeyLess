@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { getRecommendations } from '../api/sickAPI';
 import { useInputContext } from '../contexts/InputContext';
+import { useRecommendContext } from '../contexts/RecommendContext';
 import { SearchCacheType } from '../types/search';
 import { SickType } from '../types/sick';
 import { DEFAULT_PAGE } from '../utils/constants';
@@ -10,17 +11,18 @@ interface IUseSickSearch {
   page: number;
 }
 
-const cache: Map<string, Array<SickType>> = new Map();
+// const cache: Map<string, Array<SickType>> = new Map();
 
 const useSickSearch = ({ query, page = DEFAULT_PAGE }: IUseSickSearch) => {
   const { isLoading, setIsLoading } = useInputContext();
+  const { recommendations, setRecommendations, cache } = useRecommendContext();
 
   const [error, setError] = useState(false);
-  const [searchList, setSearchList] = useState<Array<SickType>>([]);
+  // const [searchList, setSearchList] = useState<Array<SickType>>([]);
   const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
-    setSearchList([]);
+    setRecommendations([]);
   }, [query]);
 
   useEffect(() => {
@@ -30,19 +32,18 @@ const useSickSearch = ({ query, page = DEFAULT_PAGE }: IUseSickSearch) => {
 
       /* Caching */
       if (cache.has(query)) {
-        // FIXME
         const data = cache.get(query);
-        setSearchList(data!);
+        setRecommendations(data!);
         setIsLoading(false);
       } else {
         getRecommendations({ q: query, page: page })
           .then((res: any) => {
-            setSearchList((prev: Array<SickType>) => {
+            setRecommendations((prev: Array<SickType>) => {
               const newList = [...prev, ...res];
               cache.set(query, newList);
               return newList;
             });
-            setHasMore(searchList.length < res.data.total);
+            setHasMore(recommendations.length < res.data.total);
           })
           .catch((err) => setError(true))
           .finally(() => setIsLoading(false));
@@ -54,7 +55,6 @@ const useSickSearch = ({ query, page = DEFAULT_PAGE }: IUseSickSearch) => {
     query,
     isLoading,
     error,
-    searchList,
     hasMore,
   };
 };

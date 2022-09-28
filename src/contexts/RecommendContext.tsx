@@ -3,11 +3,13 @@ import { SickType } from '../types/sick';
 
 interface IRecommendProvider {
   children: any;
+  cache: Map<string, Array<SickType>>;
 }
 
 interface IRecommendContext {
   recommendations: Array<SickType>;
   setRecommendations: Dispatch<SetStateAction<Array<SickType>>>;
+  cache: Map<string, Array<SickType>>;
 }
 
 const RecommendContext = createContext<IRecommendContext | null>(null);
@@ -18,12 +20,13 @@ export const useRecommendContext = () => {
   return context;
 };
 
-export function RecommendContextProvider({ children }: IRecommendProvider) {
+export function RecommendContextProvider({ children, cache }: IRecommendProvider) {
   const [recommendations, setRecommendations] = useState<Array<SickType>>([]);
 
   const value: IRecommendContext = {
     recommendations,
     setRecommendations,
+    cache,
   };
 
   return <RecommendContext.Provider value={value}>{children}</RecommendContext.Provider>;

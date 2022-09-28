@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useInputContext } from '../../contexts/InputContext';
+import { useRecommendContext } from '../../contexts/RecommendContext';
 import useSickSearch from '../../hooks/useSickSearch';
 import { localeKR } from '../../locales';
 import { SickType } from '../../types/sick';
@@ -12,9 +13,10 @@ import SickItem from './SickItem';
 
 const SickList = () => {
   const { query } = useInputContext();
+  const { recommendations } = useRecommendContext();
 
   const [page, setPage] = useState(DEFAULT_PAGE);
-  const { searchList, isLoading, hasMore, error } = useSickSearch({ query, page: page });
+  const { isLoading, hasMore, error } = useSickSearch({ query, page: page });
 
   const handleLoadMore = () => {
     setPage((prev) => prev + 1);
@@ -22,32 +24,32 @@ const SickList = () => {
 
   return (
     <SickListWrapper>
-      {searchList ? (
-        <ListBox>
-          <ListHeader>{localeKR.sickList.recommendListHeader}</ListHeader>
-          {searchList.length > 0 ? (
-            searchList.map((item: SickType, idx: number) => (
-              <ItemContainer key={idx}>
-                <SickItem sickName={item.sickNm} />
-                {searchList.length === idx + 1 ? (
-                  !isLoading ? (
-                    // <MoreItemsIndicator ref={lastItemElementRef} onClick={handleLoadMore}>
-                    <MoreItemsIndicator onClick={handleLoadMore}>
-                      <MoreItemsIndicatorIcon />
-                    </MoreItemsIndicator>
-                  ) : (
-                    <MoreItemsIndicator>
-                      <Spinner />
-                    </MoreItemsIndicator>
-                  )
-                ) : null}
-              </ItemContainer>
-            ))
-          ) : (
-            <NoResultsText>{localeKR.sickList.emptyResultPlaceholder}</NoResultsText>
-          )}
-        </ListBox>
-      ) : null}
+      {/* {recommendations ? ( */}
+      <ListBox>
+        <ListHeader>{localeKR.sickList.recommendListHeader}</ListHeader>
+        {recommendations.length > 0 ? (
+          recommendations.map((item: SickType, idx: number) => (
+            <ItemContainer key={idx}>
+              <SickItem sickName={item.sickNm} />
+              {recommendations.length === idx + 1 ? (
+                !isLoading ? (
+                  // <MoreItemsIndicator ref={lastItemElementRef} onClick={handleLoadMore}>
+                  <MoreItemsIndicator onClick={handleLoadMore}>
+                    <MoreItemsIndicatorIcon />
+                  </MoreItemsIndicator>
+                ) : (
+                  <MoreItemsIndicator>
+                    <Spinner />
+                  </MoreItemsIndicator>
+                )
+              ) : null}
+            </ItemContainer>
+          ))
+        ) : (
+          <NoResultsText>{localeKR.sickList.emptyResultPlaceholder}</NoResultsText>
+        )}
+      </ListBox>
+      {/* ) : null} */}
     </SickListWrapper>
   );
 };

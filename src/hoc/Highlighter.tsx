@@ -9,7 +9,7 @@ const Highlighter = ({ text, highlight }: IHighlighter) => {
   const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
 
   return (
-    <Text>
+    <HighlighterWrapper>
       {parts.map((part: string, idx: number) =>
         part.toLowerCase() === highlight.toLowerCase() ? (
           <HighlightedText key={idx}>{part}</HighlightedText>
@@ -17,9 +17,16 @@ const Highlighter = ({ text, highlight }: IHighlighter) => {
           <Text key={idx}>{part}</Text>
         )
       )}
-    </Text>
+    </HighlighterWrapper>
   );
 };
+
+const HighlighterWrapper = styled.span`
+  width: max-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const HighlightedText = styled.span`
   color: ${(props) => props.theme.colors.textHighlighted};
@@ -27,7 +34,7 @@ const HighlightedText = styled.span`
 `;
 
 const Text = styled.span`
-  white-space: nowrap;
+  /* white-space: nowrap; */
 `;
 
 export default Highlighter;

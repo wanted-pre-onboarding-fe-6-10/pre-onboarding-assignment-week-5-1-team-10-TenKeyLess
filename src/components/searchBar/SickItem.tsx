@@ -35,6 +35,7 @@ const ItemWrapper = styled.div`
 `;
 
 const SearchIcon = styled(FaSearch)`
+  min-width: fit-content;
   color: ${(props) => props.theme.colors.textDisabled};
   margin-right: ${(props) => props.theme.space.small};
 `;

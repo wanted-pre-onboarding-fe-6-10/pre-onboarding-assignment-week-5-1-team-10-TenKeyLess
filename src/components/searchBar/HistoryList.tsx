@@ -1,28 +1,21 @@
 import styled from 'styled-components';
+import { useInputContext } from '../../contexts/InputContext';
 import { localeKR } from '../../locales';
+import HistoryItem from './HistoryItem';
+import SickItem from './SickItem';
 
 const HistoryList = () => {
+  const { searchHistory } = useInputContext();
+
   return (
     <HistoryListWrapper>
       <ListBox>
         <ListHeader>{localeKR.sickList.recentKeywordHeader}</ListHeader>
-        {/* {searchList.map((item: SickType, idx: number) => (
-            <ItemContainer key={idx}>
-              <SickItem sickName={item.sickNm} />
-              {searchList.length === idx + 1 ? (
-                !isLoading ? (
-                  // <MoreItemsIndicator ref={lastItemElementRef} onClick={handleLoadMore}>
-                  <MoreItemsIndicator onClick={handleLoadMore}>
-                    <MoreItemsIndicatorIcon />
-                  </MoreItemsIndicator>
-                ) : (
-                  <MoreItemsIndicator>
-                    <Spinner />
-                  </MoreItemsIndicator>
-                )
-              ) : null}
-            </ItemContainer>
-          ))} */}
+        <ItemBox>
+          {searchHistory.map((keyword: string, idx: number) => (
+            <HistoryItem key={idx} keyword={keyword} />
+          ))}
+        </ItemBox>
       </ListBox>
     </HistoryListWrapper>
   );
@@ -49,8 +42,12 @@ const ListBox = styled.div`
 
 const ListHeader = styled.div`
   color: ${(props) => props.theme.colors.textDisabled};
-  padding-bottom: ${(props) => props.theme.space.smaller};
+  padding-bottom: ${(props) => props.theme.space.medium};
   font-size: ${(props) => props.theme.fontSizes.small};
+  padding-left: ${(props) => props.theme.space.medium};
+`;
+
+const ItemBox = styled.div`
   padding-left: ${(props) => props.theme.space.medium};
 `;
 
