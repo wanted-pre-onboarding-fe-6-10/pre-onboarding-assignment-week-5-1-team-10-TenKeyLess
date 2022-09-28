@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getRecommendations } from '../api/sickAPI';
 import { useInputContext } from '../contexts/InputContext';
+import { SickType } from '../types/sick';
 import { DEFAULT_PAGE } from '../utils/constants';
 
 interface IUseSickSearch {
@@ -12,7 +13,7 @@ const useSickSearch = ({ query, page = DEFAULT_PAGE }: IUseSickSearch) => {
   const { isLoading, setIsLoading } = useInputContext();
 
   const [error, setError] = useState(false);
-  const [searchList, setSearchList] = useState<Array<string>>([]);
+  const [searchList, setSearchList] = useState<Array<SickType>>([]);
   const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const useSickSearch = ({ query, page = DEFAULT_PAGE }: IUseSickSearch) => {
       setError(false);
       getRecommendations({ q: query, page: page })
         .then((res: any) => {
-          setSearchList((prev: Array<string>) => [...prev, ...res]);
+          setSearchList((prev: Array<SickType>) => [...prev, ...res]);
           setHasMore(searchList.length < res.data.total);
         })
         .catch((err) => setError(true))

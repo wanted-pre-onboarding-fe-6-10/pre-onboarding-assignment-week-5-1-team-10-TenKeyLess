@@ -71,7 +71,7 @@ const SearchBar = () => {
           onChange={(e) => handleQueryInput(e)}
           onFocus={setFocus}
           onBlur={setBlur}
-          disabled={isLoading}
+          // disabled={isLoading}
         />
         {!isLoading ? <IconButton icon={<SearchButton />} type="submit" /> : <Spinner />}
       </FormBox>

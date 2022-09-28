@@ -11,7 +11,7 @@ export const getRecommendations = async ({
 }: SearchRequestType) => {
   try {
     console.info('calling api');
-    const data = await httpRequest.get(END_POINT, { params: { q: '' } });
+    const data = await httpRequest.get(END_POINT, { params: { q, page, limit } });
     return data;
   } catch (error) {
     throw new Error('');
