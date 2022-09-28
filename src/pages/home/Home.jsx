@@ -1,45 +1,50 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { addKeywords } from '../../store/searchSlice';
+import { addKeywords } from '../../store/keywordsSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
-const BaseUrl = process.env.REACT_APP_BASE_URL;
+import { BsInbox } from 'react-icons/bs';
+
+const BaseUrl = process.env.REACT_APP_BASE_URL; // [질문]
 
 const Home = () => {
   const [keywordList, setKeywordList] = useState([]);
-  let searchText = '';
-
-  const { keywords } = useSelector(state => state);
-  //   console.log(keywords);
+  const [searchValue, setSearchValue] = useState('');
 
   const dispatch = useDispatch();
+  const { keywords } = useSelector(state => state);
 
-  let isDoenFlag = useRef();
+  let decounceFlag = useRef();
 
-  const inputChange = e => {
-    clearTimeout(isDoenFlag.current);
+  const keywordChange = e => {
+    clearTimeout(decounceFlag.current);
 
-    searchText = e.target.value;
+    let searchValue = e.target.value;
+    setSearchValue(searchValue);
 
-    if (searchText === '') {
+    if (searchValue === '') {
       return;
     }
 
-    isDoenFlag.current = setTimeout(() => {
-      if (keywords[searchText]) {
-        // [난관1] 어떻게 map돌리는 코드로 1)useSelect (keywords[keyword]) 값을 이어줄지?
-        setKeywordList(keywords[searchText]);
+    decounceFlag.current = setTimeout(() => {
+      const searchList = keywords[searchValue];
+
+      if (searchList) {
+        const bordList = searchList.map(el => highlightedText(el.sickNm, searchValue));
+        setKeywordList(bordList);
       } else {
-        // api 호출 후 보여주기 // [난관2] 어떻게 api 호출 후, 1)그 결과를 useSelect로 받아서 2)map돌리는 코드로 이어줄지?
-        axios(`${BaseUrl}/sick?q=${searchText}`).then(res => {
-          console.log('apiCount', apiCount);
+        axios(`${BaseUrl}/sick?q=${searchValue}`).then(res => {
+          console.log('api 호출 횟수 : ', apiCount);
           apiCount += 1;
-          dispatch(addKeywords({ searchText: searchText, result: res.data }));
-          setKeywordList(res.data);
+
+          const responseList = res.data;
+          dispatch(addKeywords({ searchWord: searchValue, result: responseList }));
+
+          const bordList = responseList.map(el => highlightedText(el.sickNm, searchValue));
+          setKeywordList(bordList);
         });
       }
-      // console.log('woooow');
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -54,11 +59,12 @@ const Home = () => {
           <div className="mb-14 px-5 py-2 bg-white w-5/6 h-16 rounded-3xl flexCenter justify-between ">
             <input
               type="text"
+              value={searchValue}
               className=" border-none w-4/5 text-xl"
               placeholder="질환명을 입력해주세요"
-              onInput={e => inputChange(e)}
+              onInput={e => keywordChange(e)}
             />
-            <button type="button" className="btn-clear">
+            <button type="button" className="btn-clear" onClick={() => setSearchValue('')}>
               x
             </button>
             <button type="button" className="btn-primary">
@@ -66,24 +72,12 @@ const Home = () => {
             </button>
           </div>
         </div>
-
         {/* 3. 검색결과창 */}
-        <div className="absolute top-[310px] w-2/6 h-max overflow-scroll scrollbar-hide rounded-3xl py-5 bg-gray-300">
-          <ul className="w-full max-h-96">
-            {keywordList.length > 0 &&
-              keywordList.map(el => {
-                let text = el.sickNm;
-
-                text = text.length > 27 ? `${text.slice(0, 27)}...` : text;
-                return (
-                  <li key={el.sickCd} className="searchList flex items-center">
-                    <AiOutlineSearch className="mr-3" />
-                    {text}
-                  </li>
-                );
-              })}
-          </ul>
-        </div>
+        {searchValue && keywordList.length > 0 ? (
+          <SearchBox keywordList={keywordList} />
+        ) : (
+          <NoSearchBox />
+        )}
       </header>
     </div>
   );
@@ -92,3 +86,81 @@ const Home = () => {
 export default Home;
 
 let apiCount = 1;
+const highlightedText = (text, searchWord) => {
+  if (searchWord !== '' && text.includes(searchWord)) {
+    const parts = text.split(new RegExp(`(${searchWord})`, 'gi'));
+
+    return (
+      <span>
+        {parts.map((part, index) => (part === searchWord ? <mark key={index}>{part}</mark> : part))}
+      </span>
+    );
+  }
+};
+
+const SearchBox = ({ keywordList }) => {
+  let [highLighNum, setHighLighNum] = useState(0);
+
+  const LinkEl = useRef();
+
+  useEffect(() => {
+    if (+LinkEl.current.id === +highLighNum) {
+      LinkEl.current.focus();
+      LinkEl.current.classList.add('bg-gray-200');
+    }
+  }, [highLighNum]);
+
+  return (
+    <div className="absolute top-[310px] w-2/6 h-max overflow-scroll scrollbar-hide rounded-3xl py-5 bg-gray-300">
+      <ul
+        className="w-full max-h-96"
+        onKeyDown={e => {
+          if (e.keyCode === 40) {
+            setHighLighNum(prev => {
+              if (prev === keywordList.length - 1) {
+                return prev;
+              }
+              return (prev += 1);
+            });
+          }
+          if (e.keyCode === 38) {
+            setHighLighNum(prev => {
+              if (prev === 0) {
+                return prev;
+              }
+              return (prev -= 1);
+            });
+          }
+        }}
+      >
+        <li className="pl-2">{keywordList.length}개의 검색 결과</li>
+        {keywordList.map((spanEl, idx) => {
+          return (
+            <li key={idx}>
+              {idx === highLighNum && (
+                <a href="/" ref={LinkEl} id={idx} className="searchList flex items-center">
+                  <AiOutlineSearch className="mr-3" />
+                  {spanEl}
+                </a>
+              )}
+              {idx !== highLighNum && (
+                <a href="/" id={idx} className="searchList flex items-center">
+                  <AiOutlineSearch className="mr-3" />
+                  {spanEl}
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+const NoSearchBox = () => {
+  return (
+    <div className="absolute top-[310px] w-2/6 h-max flexCenter rounded-3xl py-5 bg-gray-300">
+      <BsInbox className="mr-5" /> 검색 결과가 없습니다
+    </div>
+  );
+};

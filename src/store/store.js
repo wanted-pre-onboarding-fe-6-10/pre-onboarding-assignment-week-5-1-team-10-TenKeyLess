@@ -1,10 +1,10 @@
 import logger from 'redux-logger';
 import { configureStore } from '@reduxjs/toolkit';
-import searchReducer from './searchSlice';
+import keywordsReducer from './keywordsSlice';
 
 const store = configureStore({
   reducer: {
-    keywords: searchReducer,
+    keywords: keywordsReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
 });
