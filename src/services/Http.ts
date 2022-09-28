@@ -16,13 +16,14 @@ class Http implements HttpClient {
     this.baseURL = baseURL;
   }
 
-  fetch: (method: Methods, url?: string) => Promise<any> = (method, url) => {
+  fetch: (method: Methods, url?: string) => Promise<any> = (method, q) => {
     const instance = axios.create({
       baseURL: this.baseURL,
     });
 
     return instance({
       method,
+      params: { q: q },
     });
   };
 }
