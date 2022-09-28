@@ -16,6 +16,9 @@ type colorType = {
 
   background: string;
   subBackground: string;
+  hoveredBackground: string;
+
+  divider: string;
 
   warning: string;
   error: string;
@@ -26,7 +29,11 @@ type fontSizeType = {
 };
 
 type spaceType = {
-  sm: string;
+  smaller: string;
+  small: string;
+  medium: string;
+  large: string;
+  larger: string;
 };
 
 declare module 'styled-components' {

@@ -6,6 +6,7 @@ const Spinner = styled(FaSpinner)`
   animation: spin 2s linear infinite;
   display: flex;
   align-self: center;
+  color: ${(props) => props.theme.colors.primary};
 
   @keyframes spin {
     0% {

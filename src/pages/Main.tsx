@@ -16,7 +16,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  padding: ${(props) => props.theme.space.sm};
+  padding: ${(props) => props.theme.space.larger};
   background-color: ${(props) => props.theme.colors.background};
 `;
 

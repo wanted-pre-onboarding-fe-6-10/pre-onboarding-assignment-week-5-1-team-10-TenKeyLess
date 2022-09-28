@@ -1,31 +1,12 @@
-import { useState } from 'react';
-import { FaEllipsisH } from 'react-icons/fa';
 import styled from 'styled-components';
-import { useInputContext } from '../../contexts/InputContext';
-import useSickSearch from '../../hooks/useSickSearch';
 import { localeKR } from '../../locales';
-import { SickType } from '../../types/sick';
 
-import { DEFAULT_PAGE } from '../../utils/constants';
-import Spinner from '../common/Spinner';
-import SickItem from './SickItem';
-
-const SickList = () => {
-  const { query } = useInputContext();
-
-  const [page, setPage] = useState(DEFAULT_PAGE);
-  const { searchList, isLoading, hasMore, error } = useSickSearch({ query, page: page });
-
-  const handleLoadMore = () => {
-    setPage((prev) => prev + 1);
-  };
-
+const HistoryList = () => {
   return (
-    <SickListWrapper>
-      {searchList ? (
-        <ListBox>
-          <ListHeader>{localeKR.sickList.recommendListHeader}</ListHeader>
-          {searchList.map((item: SickType, idx: number) => (
+    <HistoryListWrapper>
+      <ListBox>
+        <ListHeader>{localeKR.sickList.recentKeywordHeader}</ListHeader>
+        {/* {searchList.map((item: SickType, idx: number) => (
             <ItemContainer key={idx}>
               <SickItem sickName={item.sickNm} />
               {searchList.length === idx + 1 ? (
@@ -41,14 +22,13 @@ const SickList = () => {
                 )
               ) : null}
             </ItemContainer>
-          ))}
-        </ListBox>
-      ) : null}
-    </SickListWrapper>
+          ))} */}
+      </ListBox>
+    </HistoryListWrapper>
   );
 };
 
-const SickListWrapper = styled.div`
+const HistoryListWrapper = styled.div`
   border-radius: 2rem;
 `;
 
@@ -74,29 +54,4 @@ const ListHeader = styled.div`
   padding-left: ${(props) => props.theme.space.medium};
 `;
 
-const ItemContainer = styled.div`
-  width: 100%;
-  padding: 1px 5px;
-`;
-
-const MoreItemsIndicator = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  padding: 9px 5px;
-  cursor: pointer;
-  border-radius: 3px;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.background};
-  }
-
-  &:active {
-    background-color: ${(props) => props.theme.colors.error};
-  }
-`;
-
-const MoreItemsIndicatorIcon = styled(FaEllipsisH)``;
-
-export default SickList;
+export default HistoryList;

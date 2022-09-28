@@ -7,6 +7,10 @@ const Header = () => {
 
 const Title = styled.header`
   font-size: 2rem;
+  font-weight: bolder;
+  white-space: pre-line;
+  text-align: center;
+  margin-bottom: ${(props) => props.theme.space.larger};
 `;
 
 export default Header;

@@ -23,6 +23,7 @@ const Highlighter = ({ text, highlight }: IHighlighter) => {
 
 const HighlightedText = styled.span`
   color: ${(props) => props.theme.colors.textHighlighted};
+  font-weight: bold;
 `;
 
 const Text = styled.span`

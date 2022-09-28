@@ -8,6 +8,7 @@ import Spinner from '../common/Spinner';
 import { localeKR } from '../../locales';
 import useFocus from '../../hooks/useFocus';
 import SickList from './SickList';
+import HistoryList from './HistoryList';
 
 const SearchBar = () => {
   const { query, setQuery, isLoading: isInputLoading } = useInputContext();
@@ -60,10 +61,10 @@ const SearchBar = () => {
   // );
 
   return (
-    <SpacebarWrapper>
+    <SearchBarWrapper>
       {/* <FormBox onSubmit={handleSubmit} focused={isFocus}> */}
       <FormBox focused={isFocus}>
-        <FaSearch />
+        {/* <FaSearch /> */}
         <SearchInput
           placeholder={localeKR.placeholder.searchbar}
           ref={ref}
@@ -73,35 +74,36 @@ const SearchBar = () => {
           onBlur={setBlur}
           // disabled={isLoading}
         />
-        {!isLoading ? <IconButton icon={<SearchButton />} type="submit" /> : <Spinner />}
+        {!isLoading ? <IconButton icon={<SearchButton />} type="submit" /> : <LoadingSpinner />}
       </FormBox>
-      {query && <SickList />}
-    </SpacebarWrapper>
+      {isFocus ? query ? <SickList /> : <HistoryList /> : null}
+    </SearchBarWrapper>
   );
 };
 
-const SpacebarWrapper = styled.div``;
+const SearchBarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  max-width: 600px;
+`;
 
 const FormBox = styled.form<{ focused: boolean }>`
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  border-radius: calc(0.5 * 100px);
-  justify-content: space-evenly;
-  box-sizing: border-box;
-
+  margin-bottom: ${(props) => props.theme.space.smaller};
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  background: #ffffff;
+  background: ${(props) => props.theme.colors.subBackground};
   border: 1px solid #dedede;
-  border-radius: 6px;
+  border-radius: ${(props) => props.theme.radius[1]};
+  padding: 0 ${(props) => props.theme.space.smaller};
 
-  border: ${({ theme, focused }) => (focused ? `2px solid ${theme.colors.primary}` : null)};
+  box-shadow: ${({ theme, focused }) =>
+    focused ? `0 0 0 2px ${theme.colors.primary} inset` : null};
+
   &:hover {
-    box-shadow: 0 0 0 2px #dedede inset;
+    background-color: ${(props) => props.theme.colors.hoveredBackground};
   }
 `;
 
@@ -109,17 +111,28 @@ const SearchInput = styled.input`
   font-size: 1rem;
   font-weight: 400;
   width: 85%;
-  padding-right: 5px;
-  padding-left: 10px;
   border-radius: calc(0.5 * 100px);
   background-color: transparent;
   height: 45px;
   outline: none;
   border: none;
+  padding-left: ${(props) => props.theme.space.medium};
+  ::placeholder {
+    color: ${(props) => props.theme.colors.textDisabled};
+  }
 `;
 
 const SearchButton = styled(FaSearch)`
-  color: ${(props) => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.primary};
+  border-radius: 100%;
+  width: 100%;
+  height: 75%;
+  padding: 8px;
+  color: ${(props) => props.theme.colors.subBackground};
+`;
+
+const LoadingSpinner = styled(Spinner)`
+  margin-right: ${(props) => props.theme.space.smaller};
 `;
 
 export default SearchBar;
