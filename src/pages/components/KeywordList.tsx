@@ -6,10 +6,9 @@ const KeywordList = () => {
   const { list } = useKeyword();
   const { autoRef, index } = useKeydown();
 
-  console.log(autoRef);
-
   return (
     <Wrapper ref={autoRef}>
+      {list.length !== 0 && <Title>추천검색어</Title>}
       {list.map((el, idx) => {
         return (
           <Keyword isFocus={index === idx ? true : false} key={el.sickCd}>
@@ -34,8 +33,15 @@ const Keyword = styled.li<{ isFocus?: boolean }>`
   list-style: none;
   padding: 1rem;
   margin: 0 0.5rem;
-  background-color: ${props => (props.isFocus ? 'black' : '#fff')};
+  background-color: ${props => (props.isFocus ? '#e3f2fd' : '#fff')};
   &:hover {
-    background-color: black;
+    background-color: #e3f2fd;
   }
+`;
+
+const Title = styled.div`
+  margin: 0.8rem 1.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #2196f3;
 `;
