@@ -2,10 +2,12 @@ import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/
 import logger from 'redux-logger';
 import updateSlice from './updateSlice';
 import inputSlice from './inputSlice';
+import keydownSlice from './keydownSlice';
 
 const rootReducer = combineReducers({
   input: inputSlice,
   list: updateSlice,
+  key: keydownSlice,
 });
 
 export const store = configureStore({
