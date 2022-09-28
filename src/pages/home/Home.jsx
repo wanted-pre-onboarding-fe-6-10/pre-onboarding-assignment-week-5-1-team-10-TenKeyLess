@@ -18,6 +18,7 @@ const Home = () => {
 
   const keywordChange = e => {
     clearTimeout(decounceFlag.current);
+    setKeywordList([]);
 
     let searchValue = e.target.value;
     setSearchValue(searchValue);
@@ -44,7 +45,7 @@ const Home = () => {
           setKeywordList(bordList);
         });
       }
-    }, 2000);
+    }, 3000);
   };
 
   return (
@@ -105,8 +106,10 @@ const SearchBox = ({ keywordList }) => {
 
   useEffect(() => {
     if (+LinkEl.current.id === +highLighNum) {
-      LinkEl.current.focus();
       LinkEl.current.classList.add('bg-gray-200');
+      setTimeout(() => {
+        LinkEl.current.focus();
+      }, 100);
     }
   }, [highLighNum]);
 
