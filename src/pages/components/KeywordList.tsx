@@ -1,24 +1,39 @@
 import useKeydown from '../../hooks/useKeydown';
 import useKeyword from '../../hooks/useKeyword';
 import styled from 'styled-components';
+import useInput from '../../hooks/useInput';
+import highlighter from '../../utils/highlighter';
 
 const KeywordList = () => {
+  const { input } = useInput();
   const { list } = useKeyword();
   const { autoRef, index } = useKeydown();
 
   return (
     <Wrapper ref={autoRef}>
-      {list.length !== 0 && <Title>추천검색어</Title>}
+      {list.length !== 0 ? <Title>추천검색어</Title> : <Title>검색어 없음</Title>}
       {list.map((el, idx) => {
         return (
           <Keyword isFocus={index === idx ? true : false} key={el.sickCd}>
-            {el.sickNm}
+            {highlighter(el.sickNm, input)}
           </Keyword>
         );
       })}
     </Wrapper>
   );
 };
+
+// highlightText.map((text, index) => {
+//   if (text === input) {
+//     return (
+//       <span key={index} style={{ color: '#2196f3' }}>
+//         {text}
+//       </span>
+//     );
+//   } else {
+//     return text;
+//   }
+// });
 
 export default KeywordList;
 
