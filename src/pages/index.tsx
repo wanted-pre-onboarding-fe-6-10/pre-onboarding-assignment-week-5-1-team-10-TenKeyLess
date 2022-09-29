@@ -32,10 +32,6 @@ const Home = () => {
         fetch(`${process.env.REACT_APP_BASE_URL}/sick?q=${keyword}`)
           .then(res => res.json())
           .then(data => {
-            if (data.length === 0) {
-              setLoading(false);
-              return setWordList([{ sickCd: '검색어 없음', sickNm: '검색어 없음' }]);
-            }
             window.localStorage.setItem('searchData', JSON.stringify({ key: keyword, data }));
             setWordList(data);
             setLoading(false);
@@ -137,7 +133,13 @@ const Home = () => {
             ))}
           </SearchList>
         </ListBox>
-      ) : null}
+      ) : (
+        <ListBox>
+          <SearchList>
+            <SearchListItem style={{ fontWeight: 'bold' }}>검색어 없음</SearchListItem>
+          </SearchList>
+        </ListBox>
+      )}
     </Container>
   );
 };
