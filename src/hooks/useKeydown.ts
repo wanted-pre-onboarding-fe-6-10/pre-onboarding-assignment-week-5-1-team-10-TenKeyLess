@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setKeydown } from '../store/keydownSlice';
 import { AppDispatch, ReducerType } from '../store/store';
 
 const useKeydown = () => {
-  //   const [index, setIndex] = useState<number>(-1);
   const autoRef = useRef<HTMLUListElement>(null);
   const { list } = useSelector((state: ReducerType) => state.list);
   const { index } = useSelector((state: ReducerType) => state.key);
