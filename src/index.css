@@ -27,4 +27,8 @@ button {
   .searchList {
     @apply w-full py-3 px-5 text-lg hover:bg-violet-200;
   }
+
+  .searchBox {
+    @apply absolute top-[310px] w-2/6 h-max rounded-3xl py-5 bg-gray-300;
+  }
 }
