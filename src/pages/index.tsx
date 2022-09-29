@@ -1,11 +1,13 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import styled from 'styled-components';
-import { text } from 'stream/consumers';
 
 interface SearchData {
   sickCd: string;
   sickNm: string;
+}
+interface localStorageData {
+  data: SearchData[];
 }
 
 const Home = () => {
@@ -19,6 +21,12 @@ const Home = () => {
       debounce(keyword => {
         setQuery(keyword);
         if (keyword === '') return;
+        const localData = window.localStorage.getItem('searchData');
+        const localStorageData = JSON.parse(localData!);
+        if (localStorageData.key === keyword) {
+          setWordList(localStorageData.data);
+          return;
+        }
         setLoading(true);
         console.info('calling api');
         fetch(`${process.env.REACT_APP_BASE_URL}/sick?q=${keyword}`)
@@ -28,7 +36,7 @@ const Home = () => {
               setLoading(false);
               return setWordList([{ sickCd: '검색어 없음', sickNm: '검색어 없음' }]);
             }
-            window.localStorage.setItem('searchData', JSON.stringify({ key: query, data }));
+            window.localStorage.setItem('searchData', JSON.stringify({ key: keyword, data }));
             setWordList(data);
             setLoading(false);
           });
