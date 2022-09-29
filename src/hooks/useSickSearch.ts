@@ -10,14 +10,11 @@ interface IUseSickSearch {
   page: number;
 }
 
-// const cache: Map<string, Array<SickType>> = new Map();
-
 const useSickSearch = ({ query, page = DEFAULT_PAGE }: IUseSickSearch) => {
   const { isLoading, setIsLoading } = useInputContext();
   const { recommendations, setRecommendations, cache } = useRecommendContext();
 
   const [error, setError] = useState(false);
-  // const [searchList, setSearchList] = useState<Array<SickType>>([]);
   const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {

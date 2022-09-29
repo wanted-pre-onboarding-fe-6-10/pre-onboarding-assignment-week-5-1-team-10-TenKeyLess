@@ -23,8 +23,6 @@ const SickList = ({ keyDownEvent }: ISickList) => {
   const [page, setPage] = useState(DEFAULT_PAGE);
   const { isLoading, hasMore, error } = useSickSearch({ query, page: page });
   const ref = useRef<HTMLUListElement>(null);
-  // console.log(ref.current);
-  // if (ref.current) ref.current.focus();
 
   const [focus, setFocus] = useState(-1);
 
@@ -42,12 +40,10 @@ const SickList = ({ keyDownEvent }: ISickList) => {
         case 'ArrowUp':
           setFocus((prev) => prev - 1);
           if (focus <= 0) {
-            // setKeyItems([]);
             setFocus(-1);
           }
           break;
         case 'Escape':
-          // setKeyItems([]);
           setFocus(-1);
           break;
       }
@@ -80,29 +76,6 @@ const SickList = ({ keyDownEvent }: ISickList) => {
     },
     [keyDownEvent]
   );
-
-  // const handleKeyArrow = () => {
-  //   console.log(keyDownEvent);
-  //   if (keyDownEvent && recommendations.length > 0) {
-  //     switch (keyDownEvent.key) {
-  //       case 'ArrowDown':
-  //         setFocus((prev) => prev + 1);
-  //         if (ref.current?.childElementCount === focus + 1) setFocus(0);
-  //         break;
-  //       case 'ArrowUp':
-  //         setFocus((prev) => prev - 1);
-  //         if (focus <= 0) {
-  //           // setKeyItems([]);
-  //           setFocus(-1);
-  //         }
-  //         break;
-  //       case 'Escape':
-  //         // setKeyItems([]);
-  //         setFocus(-1);
-  //         break;
-  //     }
-  //   }
-  // };
 
   return (
     <SickListWrapper onKeyDown={handleKeyArrow}>
