@@ -19,8 +19,6 @@
     "react-hook-form": "^7.36.0",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
-    "recoil": "^0.7.5",
-    "recoil-persist": "^4.2.0",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
     "sweetalert2": "^11.4.33",
