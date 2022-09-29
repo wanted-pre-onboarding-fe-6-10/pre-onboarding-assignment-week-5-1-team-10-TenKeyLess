@@ -2,13 +2,8 @@ import * as React from 'react';
 
 type colorType = {
   primary: string;
-  // primaryLight: string;
-  // primaryDark: string;
 
   secondary: string;
-  // secondaryLight: string;
-  // secondaryDark: string;
-
   textMain: string;
   textSub: string;
   textDisabled: string;
@@ -38,7 +33,6 @@ type spaceType = {
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    // theme: 'light' | 'dark';
     breakpoints: string[];
     fontSizes: fontSizeType;
     space: spaceType;

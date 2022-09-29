@@ -33,8 +33,6 @@ const HighlightedText = styled.span`
   font-weight: bold;
 `;
 
-const Text = styled.span`
-  /* white-space: nowrap; */
-`;
+const Text = styled.span``;
 
 export default Highlighter;

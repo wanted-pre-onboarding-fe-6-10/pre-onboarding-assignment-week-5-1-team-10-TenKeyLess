@@ -14,7 +14,6 @@ instance.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    // 2XX 이외
     if (error.response) {
       switch (error.response.status) {
         case 400:
@@ -26,8 +25,6 @@ instance.interceptors.response.use(
         case 500:
           console.error('ERROR', error.response.data.details);
           break;
-        // default:
-        //   break;
       }
     } else {
       throw Error('SERVER IS NOT RUNNING', error);

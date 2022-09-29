@@ -16,7 +16,6 @@ const SearchBar = () => {
 
   const [textInput, setTextInput] = useState('');
   const [keyDownEvent, setKeyDownEvent] = useState<React.KeyboardEvent>();
-  // const [isLoading, setIsLoading] = useState(false);
 
   /* Debounce 적용 */
   let debounce: NodeJS.Timeout | null = null;
@@ -44,7 +43,6 @@ const SearchBar = () => {
         alert('Something went wrong.');
       } finally {
         setTextInput('');
-        // setIsLoading(false);
       }
     },
     [query]
