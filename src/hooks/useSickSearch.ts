@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getRecommendations } from '../api/sickAPI';
 import { useInputContext } from '../contexts/InputContext';
 import { useRecommendContext } from '../contexts/RecommendContext';
-import { SearchCacheType } from '../types/search';
 import { SickType } from '../types/sick';
 import { DEFAULT_PAGE } from '../utils/constants';
 

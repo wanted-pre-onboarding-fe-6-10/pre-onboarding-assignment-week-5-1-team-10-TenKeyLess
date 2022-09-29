@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useInputContext } from '../../contexts/InputContext';
 import { useRecommendContext } from '../../contexts/RecommendContext';
+import useFocus from '../../hooks/useFocus';
 import useSickSearch from '../../hooks/useSickSearch';
 import { localeKR } from '../../locales';
 import { SickType } from '../../types/sick';
@@ -11,26 +12,107 @@ import { DEFAULT_PAGE } from '../../utils/constants';
 import Spinner from '../common/Spinner';
 import SickItem from './SickItem';
 
-const SickList = () => {
+interface ISickList {
+  keyDownEvent: React.KeyboardEvent | undefined;
+}
+
+const SickList = ({ keyDownEvent }: ISickList) => {
   const { query } = useInputContext();
   const { recommendations } = useRecommendContext();
 
   const [page, setPage] = useState(DEFAULT_PAGE);
   const { isLoading, hasMore, error } = useSickSearch({ query, page: page });
+  const ref = useRef<HTMLUListElement>(null);
+  // console.log(ref.current);
+  // if (ref.current) ref.current.focus();
+
+  const [focus, setFocus] = useState(-1);
 
   const handleLoadMore = () => {
     setPage((prev) => prev + 1);
   };
 
+  useEffect(() => {
+    if (keyDownEvent && recommendations.length > 0) {
+      switch (keyDownEvent.key) {
+        case 'ArrowDown':
+          setFocus((prev) => prev + 1);
+          if (ref.current?.childElementCount === focus + 1) setFocus(0);
+          break;
+        case 'ArrowUp':
+          setFocus((prev) => prev - 1);
+          if (focus <= 0) {
+            // setKeyItems([]);
+            setFocus(-1);
+          }
+          break;
+        case 'Escape':
+          // setKeyItems([]);
+          setFocus(-1);
+          break;
+      }
+    }
+  }, [keyDownEvent]);
+
+  const handleKeyArrow = useCallback(
+    (e: React.KeyboardEvent) => {
+      console.log('skldf');
+      e.preventDefault();
+      if (keyDownEvent && recommendations.length > 0) {
+        switch (keyDownEvent.key) {
+          case 'ArrowDown':
+            setFocus((prev) => prev + 1);
+            if (ref.current?.childElementCount === focus + 1) setFocus(0);
+            break;
+          case 'ArrowUp':
+            setFocus((prev) => prev - 1);
+            if (focus <= 0) {
+              // setKeyItems([]);
+              setFocus(-1);
+            }
+            break;
+          case 'Escape':
+            // setKeyItems([]);
+            setFocus(-1);
+            break;
+        }
+      }
+    },
+    [keyDownEvent]
+  );
+
+  // const handleKeyArrow = () => {
+  //   console.log(keyDownEvent);
+  //   if (keyDownEvent && recommendations.length > 0) {
+  //     switch (keyDownEvent.key) {
+  //       case 'ArrowDown':
+  //         setFocus((prev) => prev + 1);
+  //         if (ref.current?.childElementCount === focus + 1) setFocus(0);
+  //         break;
+  //       case 'ArrowUp':
+  //         setFocus((prev) => prev - 1);
+  //         if (focus <= 0) {
+  //           // setKeyItems([]);
+  //           setFocus(-1);
+  //         }
+  //         break;
+  //       case 'Escape':
+  //         // setKeyItems([]);
+  //         setFocus(-1);
+  //         break;
+  //     }
+  //   }
+  // };
+
   return (
-    <SickListWrapper>
+    <SickListWrapper onKeyDown={handleKeyArrow}>
       {/* {recommendations ? ( */}
-      <ListBox>
+      <ListBox ref={ref}>
         <ListHeader>{localeKR.sickList.recommendListHeader}</ListHeader>
         {recommendations.length > 0 ? (
           recommendations.map((item: SickType, idx: number) => (
             <ItemContainer key={idx}>
-              <SickItem sickName={item.sickNm} />
+              <SickItem sickName={item.sickNm} isFocus={focus === idx} />
               {recommendations.length === idx + 1 ? (
                 !isLoading ? (
                   // <MoreItemsIndicator ref={lastItemElementRef} onClick={handleLoadMore}>
@@ -58,7 +140,7 @@ const SickListWrapper = styled.div`
   border-radius: 2rem;
 `;
 
-const ListBox = styled.div`
+const ListBox = styled.ul`
   max-height: 300px;
   overflow: scroll;
   box-sizing: border-box;

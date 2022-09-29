@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useInputContext } from '../../contexts/InputContext';
 import { localeKR } from '../../locales';
 import HistoryItem from './HistoryItem';
-import SickItem from './SickItem';
 
 const HistoryList = () => {
   const { searchHistory } = useInputContext();

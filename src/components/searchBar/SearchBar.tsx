@@ -15,6 +15,7 @@ const SearchBar = () => {
   const { ref, setFocus, setBlur, isFocus } = useFocus();
 
   const [textInput, setTextInput] = useState('');
+  const [keyDownEvent, setKeyDownEvent] = useState<React.KeyboardEvent>();
   // const [isLoading, setIsLoading] = useState(false);
 
   /* Debounce 적용 */
@@ -49,8 +50,12 @@ const SearchBar = () => {
     [query]
   );
 
+  const handleKeyArrow = (e: React.KeyboardEvent) => {
+    setKeyDownEvent(e);
+  };
+
   return (
-    <SearchBarWrapper>
+    <SearchBarWrapper onKeyDown={handleKeyArrow}>
       <FormBox onSubmit={handleSubmit} focused={isFocus}>
         <SearchInput
           placeholder={localeKR.placeholder.searchbar}
@@ -63,7 +68,7 @@ const SearchBar = () => {
         />
         {!isLoading ? <IconButton icon={<SearchButton />} type="submit" /> : <LoadingSpinner />}
       </FormBox>
-      {isFocus ? query ? <SickList /> : <HistoryList /> : null}
+      {isFocus ? query ? <SickList keyDownEvent={keyDownEvent} /> : <HistoryList /> : null}
     </SearchBarWrapper>
   );
 };
